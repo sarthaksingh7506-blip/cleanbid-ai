@@ -14,41 +14,70 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7', 900: '#0f172a' } }
+                    colors: { 
+                        navy: { 800: '#1e293b', 900: '#0f172a' }, // Professional Dark colors
+                        gold: { 500: '#d4af37' } // Subtle accent
+                    }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-brand-900 text-white font-sans antialiased">
+<body class="bg-navy-900 text-white font-sans antialiased">
 
-    <nav class="border-b border-white/10 bg-brand-900/90 backdrop-blur-md sticky top-0 z-50">
+    <nav class="border-b border-white/5 bg-navy-900/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <i data-lucide="sparkles" class="text-brand-500 w-6 h-6"></i>
-                <span class="font-bold text-xl">CleanBid<span class="text-brand-500">AI</span></span>
+                <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
+                <span class="font-bold text-xl tracking-wide">CleanBid<span class="text-slate-400">Pro</span></span>
             </div>
         </div>
     </nav>
 
     <div class="relative pt-12 pb-20 px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
-            Professional Cleaning Proposals <br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cyan-400">In Seconds.</span>
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
+            Create High-End Proposals.
         </h1>
-        <p class="text-slate-400 mb-10">Select your currency, enter details, and get a premium PDF.</p>
+        <p class="text-slate-400 mb-10 max-w-xl mx-auto">Generate a contract-ready PDF proposal in seconds. No design skills needed.</p>
 
-        <div class="max-w-lg mx-auto bg-slate-800/50 border border-slate-700 rounded-2xl p-8 shadow-2xl backdrop-blur-sm relative">
+        <div class="max-w-lg mx-auto bg-navy-800 border border-slate-700 rounded-lg p-8 shadow-2xl relative">
             
-            <div id="loading" class="hidden absolute inset-0 bg-slate-900/90 z-20 flex flex-col items-center justify-center rounded-2xl">
-                <i data-lucide="loader-2" class="w-10 h-10 text-brand-500 animate-spin mb-4"></i>
-                <p class="text-brand-500 animate-pulse">Designing your proposal...</p>
+            <div id="loading" class="hidden absolute inset-0 bg-navy-900/95 z-20 flex flex-col items-center justify-center rounded-lg">
+                <i data-lucide="loader" class="w-8 h-8 text-white animate-spin mb-4"></i>
+                <p class="text-white font-medium animate-pulse">Generating Contract...</p>
             </div>
 
-            <div id="form-container" class="space-y-5 text-left">
+            <div id="form-container" class="space-y-6 text-left">
+                
                 <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1">Currency</label>
-                    <select id="currency" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-brand-500 outline-none">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Your Company Name</label>
+                    <input type="text" id="senderName" class="w-full bg-navy-900 border border-slate-600 rounded p-3 text-white focus:border-white outline-none transition" placeholder="e.g. Prestige Facility Services">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Client Name</label>
+                    <input type="text" id="clientName" class="w-full bg-navy-900 border border-slate-600 rounded p-3 text-white focus:border-white outline-none transition" placeholder="e.g. Apex Law Partners">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Total Sq. Ft.</label>
+                        <input type="number" id="sqft" class="w-full bg-navy-900 border border-slate-600 rounded p-3 text-white focus:border-white outline-none transition" placeholder="2500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Frequency</label>
+                        <select id="freq" class="w-full bg-navy-900 border border-slate-600 rounded p-3 text-white focus:border-white outline-none">
+                            <option>Weekly</option>
+                            <option>Bi-Weekly</option>
+                            <option>Monthly</option>
+                            <option>Daily</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Currency</label>
+                    <select id="currency" class="w-full bg-navy-900 border border-slate-600 rounded p-3 text-white focus:border-white outline-none">
                         <option value="USD">USD ($) - United States</option>
                         <option value="INR">INR (₹) - India</option>
                         <option value="EUR">EUR (€) - Europe</option>
@@ -56,44 +85,19 @@
                     </select>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-brand-500 mb-1">Your Business Name</label>
-                    <input type="text" id="senderName" class="w-full bg-slate-900 border border-brand-500/50 rounded-lg p-3 text-white focus:ring-2 focus:ring-brand-500 outline-none" placeholder="e.g. Pristine Cleaners">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-300 mb-1">Client Business Name</label>
-                    <input type="text" id="clientName" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-brand-500 outline-none" placeholder="e.g. Apex Law Firm">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-1">Square Footage</label>
-                        <input type="number" id="sqft" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-brand-500 outline-none" placeholder="2500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-1">Frequency</label>
-                        <select id="freq" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-brand-500 outline-none">
-                            <option>Weekly</option>
-                            <option>Bi-Weekly</option>
-                            <option>Monthly</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button onclick="generateProposal()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                <button onclick="generateProposal()" class="w-full bg-white hover:bg-slate-200 text-navy-900 font-bold py-4 rounded shadow-lg transition transform hover:scale-[1.01] flex items-center justify-center gap-2 mt-4">
                     <i data-lucide="file-check" class="w-5 h-5"></i>
-                    Generate PDF
+                    Download Proposal
                 </button>
             </div>
 
             <div id="result" class="hidden text-center py-6">
-                <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="check" class="w-8 h-8 text-green-500"></i>
+                <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="check" class="w-8 h-8 text-white"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-2">Success!</h3>
-                <p class="text-slate-400 mb-6 text-sm">Your PDF has been downloaded.</p>
-                <button onclick="location.reload()" class="text-brand-500 hover:text-white text-sm underline">Create Another</button>
+                <h3 class="text-xl font-bold text-white mb-2">Proposal Ready</h3>
+                <p class="text-slate-400 mb-6 text-sm">Your document has been downloaded.</p>
+                <button onclick="location.reload()" class="text-white hover:text-slate-300 text-sm underline">Create New Proposal</button>
             </div>
         </div>
     </div>
@@ -101,7 +105,7 @@
     <script>
         lucide.createIcons();
 
-        // ⚠️ YOUR BACKEND URL ⚠️
+        // YOUR BACKEND URL
         const API_URL = "https://cleanbid-api.sarthaksingh3891.workers.dev"; 
 
         async function generateProposal() {
@@ -125,79 +129,102 @@
                 if (!response.ok) throw new Error("Backend Error");
                 const data = await response.json();
 
-                // --- FIX: Force Currency Formatting ---
-                // This makes sure it looks like "₹1,24,000" or "$12,400"
-                const symbol = data.symbol || "$";
-                const pLow = symbol + " " + data.priceLow.toLocaleString();
-                const pHigh = symbol + " " + data.priceHigh.toLocaleString();
+                // --- FORMATTING FIXES ---
+                // We use Codes (INR, USD) instead of symbols (₹) to prevent PDF errors
+                const pLow = data.priceLow.toLocaleString();
+                const pHigh = data.priceHigh.toLocaleString();
+                
+                // Construct the price string: "INR 12,000 - INR 14,000"
+                const priceText = `${currency} ${pLow} - ${currency} ${pHigh}`;
 
-                // --- PDF GENERATION ---
+                // --- PRO PDF GENERATION ---
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
-                // Header
-                doc.setFillColor(15, 23, 42); 
-                doc.rect(0, 0, 210, 50, 'F');
+                // 1. Minimalist Header (Dark Grey)
+                doc.setFillColor(30, 41, 59); 
+                doc.rect(0, 0, 210, 40, 'F');
 
                 doc.setTextColor(255, 255, 255);
                 doc.setFont("helvetica", "bold");
-                doc.setFontSize(22);
-                doc.text("Cleaning Proposal", 20, 32);
+                doc.setFontSize(18);
+                doc.text("COMMERCIAL CLEANING PROPOSAL", 20, 26);
 
+                // Date (Right Side of Header)
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
-                doc.text("Date:", 150, 25);
-                doc.text(new Date().toLocaleDateString(), 150, 32);
+                doc.setTextColor(200, 200, 200);
+                doc.text(new Date().toLocaleDateString(), 185, 26, { align: "right" });
 
-                // Info Section
+                // 2. Info Block (Clean Layout)
+                const startY = 60;
+                
+                // Left Column (Client)
+                doc.setTextColor(150, 150, 150);
+                doc.setFontSize(8);
+                doc.text("PREPARED FOR", 20, startY);
                 doc.setTextColor(0, 0, 0);
-                doc.setFontSize(10);
-                doc.text("Prepared For:", 20, 70);
-                doc.text("Prepared By:", 120, 70);
-
-                doc.setFontSize(14);
-                doc.setFont("helvetica", "bold");
-                doc.text(clientName, 20, 77);
-                doc.text(senderName, 120, 77);
-
-                // Body
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "bold");
-                doc.text("Service Overview", 20, 100);
+                doc.text(clientName, 20, startY + 6);
+
+                // Right Column (Sender)
+                doc.setTextColor(150, 150, 150);
+                doc.setFontSize(8);
+                doc.setFont("helvetica", "normal");
+                doc.text("PREPARED BY", 185, startY, { align: "right" });
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(senderName, 185, startY + 6, { align: "right" });
+
+                // 3. Separator Line
+                doc.setDrawColor(200, 200, 200);
+                doc.line(20, startY + 20, 190, startY + 20);
+
+                // 4. Cover Letter Content
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(50, 50, 50);
                 
+                // Automatically handle text wrapping
+                const splitText = doc.splitTextToSize(data.coverLetter, 170);
+                doc.text(splitText, 20, startY + 35);
+
+                // 5. Pricing Section (The "Expensive" Look)
+                let priceY = 200; // Position near bottom
+                
+                // Top Black Line
+                doc.setDrawColor(0, 0, 0);
+                doc.setLineWidth(0.5);
+                doc.line(20, priceY, 190, priceY);
+
+                // Labels
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(0, 0, 0);
+                doc.text("SERVICE FREQUENCY", 20, priceY + 10);
+                doc.text("ESTIMATED INVESTMENT", 190, priceY + 10, { align: "right" });
+
+                // Values
                 doc.setFontSize(11);
                 doc.setFont("helvetica", "normal");
-                doc.setTextColor(60, 60, 60);
-                const splitText = doc.splitTextToSize(data.coverLetter, 170);
-                doc.text(splitText, 20, 110);
-
-                // Pricing Table
-                let y = 190;
-                doc.setFillColor(241, 245, 249);
-                doc.rect(20, y, 170, 12, 'F'); 
+                doc.text(freq, 20, priceY + 20);
                 
-                doc.setFontSize(10);
-                doc.setTextColor(100, 100, 100);
-                doc.setFont("helvetica", "bold");
-                doc.text("SERVICE FREQUENCY", 25, y + 8);
-                doc.text("ESTIMATED INVESTMENT", 185, y + 8, { align: "right" });
-
-                // Price Row
-                y += 20;
-                doc.setTextColor(0, 0, 0);
+                // The Price (Bold & Right Aligned)
                 doc.setFontSize(12);
-                doc.text(freq, 25, y);
+                doc.setFont("helvetica", "bold");
+                doc.text(priceText, 190, priceY + 20, { align: "right" });
 
-                // Price Text (Formatted with Symbol)
-                const priceText = `${pLow} - ${pHigh}`;
-                doc.setFontSize(14);
-                doc.setTextColor(14, 165, 233); 
-                doc.text(priceText, 185, y, { align: "right" }); 
+                // Bottom Line (Light Grey)
+                doc.setDrawColor(200, 200, 200);
+                doc.setLineWidth(0.1);
+                doc.line(20, priceY + 30, 190, priceY + 30);
 
                 // Footer
                 doc.setFontSize(8);
                 doc.setTextColor(150, 150, 150);
-                doc.text(`Proposal valid for 30 days. Created by ${senderName} via CleanBid AI.`, 105, 280, { align: "center" });
+                doc.text("Thank you for your business.", 105, 280, { align: "center" });
 
                 doc.save(`${clientName}_Proposal.pdf`);
 
@@ -205,7 +232,7 @@
                 document.getElementById('result').classList.remove('hidden');
 
             } catch (error) {
-                alert("Connection Failed.");
+                alert("Error generating PDF. Please check your internet.");
                 console.error(error);
             }
 
