@@ -13,25 +13,59 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 600: '#0284c7', 900: '#0c4a6e' } }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' } }
                 }
             }
         }
     </script>
+    <style>
+        .mobile-menu { transition: transform 0.3s ease-in-out; }
+        .menu-open { transform: translateX(0%); }
+        .menu-closed { transform: translateX(-100%); }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="font-bold text-xl text-slate-900">Polite<span class="text-brand-600">Post</span></a>
-            <div class="flex gap-6 text-sm font-medium">
-                <a href="index.html" class="hover:text-brand-600">Home</a>
-                <a href="index.html#tool" class="text-brand-600">Use Tool</a>
+    <nav class="border-b border-white/50 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <button onclick="toggleMenu()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <a href="index.html" class="flex items-center gap-2">
+                    <div class="bg-brand-600 rounded-lg p-1.5 text-white"><i data-lucide="feather" class="w-5 h-5"></i></div>
+                    <span class="font-bold text-xl tracking-tight">Polite<span class="text-brand-600">Post</span></span>
+                </a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="index.html" class="hover:text-brand-600 transition">Home</a>
+                <a href="blog.html" class="hover:text-brand-600 transition">Blog</a>
+                <a href="about.html" class="text-brand-600">About</a>
+                <a href="index.html#tool" class="bg-brand-600 text-white px-4 py-2 rounded-full hover:bg-brand-700 transition shadow-lg shadow-brand-500/20">Use Tool</a>
             </div>
         </div>
     </nav>
 
-    <div class="flex-grow max-w-3xl mx-auto px-6 py-16">
+    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-slate-200 shadow-2xl z-50 mobile-menu menu-closed md:hidden">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <span class="font-bold text-lg">Menu</span>
+            <button onclick="toggleMenu()"><i data-lucide="x" class="w-6 h-6 text-slate-400"></i></button>
+        </div>
+        <div class="p-6 space-y-4 flex flex-col font-medium text-slate-600">
+            <a href="index.html" class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg"><i data-lucide="home" class="w-5 h-5"></i> Home</a>
+            <a href="blog.html" class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i> Blog</a>
+            <a href="about.html" class="flex items-center gap-3 text-brand-600 bg-brand-50 p-2 rounded-lg"><i data-lucide="info" class="w-5 h-5"></i> About Us</a>
+            <div class="h-px bg-slate-100 my-2"></div>
+            <a href="privacy.html" class="text-sm text-slate-400 hover:text-brand-600">Privacy Policy</a>
+            <a href="terms.html" class="text-sm text-slate-400 hover:text-brand-600">Terms of Service</a>
+            <a href="disclaimer.html" class="text-sm text-slate-400 hover:text-brand-600">Disclaimer</a>
+        </div>
+    </div>
+    
+    <div id="menu-overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black/20 z-40 hidden backdrop-blur-sm md:hidden"></div>
+
+    <div class="flex-grow max-w-3xl mx-auto px-6 py-16 w-full">
         
         <h1 class="text-4xl font-extrabold text-slate-900 mb-6">About Us</h1>
         
@@ -72,20 +106,53 @@
                     PolitePost is an open-source project constantly evolving. If you have feature requests, bug reports, or partnership inquiries, please reach out.
                 </p>
                 <p class="mt-4 font-medium">
-                    📧 Email: business.politepost.ai@hotmail.com
+                    📧 Email: <a href="mailto:business.politepost.ai@hotmail.com" class="text-brand-600 hover:underline">business.politepost.ai@hotmail.com</a>
                 </p>
             </div>
         </div>
-      
 
     </div>
 
-    <footer class="bg-white border-t border-slate-200 py-8 text-center text-sm text-slate-400 mt-auto">
-        &copy; 2025 PolitePost. All rights reserved.
+    <footer class="bg-white border-t border-slate-200 pt-16 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="font-bold text-xl tracking-tight">Polite<span class="text-brand-600">Post</span></span>
+                </div>
+                <p class="text-slate-400 text-sm max-w-xs">AI-powered communication assistant for the modern workplace. Secure, fast, and free.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-4">Product</h4>
+                <ul class="space-y-2 text-sm text-slate-500">
+                    <li><a href="index.html#tool" class="hover:text-brand-600">Email Rewriter</a></li>
+                    <li><a href="blog.html" class="hover:text-brand-600">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-4">Legal</h4>
+                <ul class="space-y-2 text-sm text-slate-500">
+                    <li><a href="privacy.html" class="hover:text-brand-600">Privacy Policy</a></li>
+                    <li><a href="terms.html" class="hover:text-brand-600">Terms of Service</a></li>
+                    <li><a href="disclaimer.html" class="hover:text-brand-600">Disclaimer</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center text-xs text-slate-400 border-t border-slate-100 pt-8">
+            &copy; 2025 PolitePost. All rights reserved.
+        </div>
     </footer>
 
     <script>
         lucide.createIcons();
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('menu-overlay');
+            if (menu.classList.contains('menu-closed')) {
+                menu.classList.remove('menu-closed'); menu.classList.add('menu-open'); overlay.classList.remove('hidden');
+            } else {
+                menu.classList.add('menu-closed'); menu.classList.remove('menu-open'); overlay.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
