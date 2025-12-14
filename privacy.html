@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | PolitePost</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { brand: { 600: '#0284c7' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-bold text-xl text-slate-900">Polite<span class="text-brand-600">Post</span></a>
+            <a href="index.html" class="text-sm font-semibold text-slate-500 hover:text-brand-600">Back to Tool</a>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-6 py-16">
+        <h1 class="text-4xl font-bold mb-2 text-slate-900">Privacy Policy</h1>
+        <p class="text-slate-500 mb-10">Last Updated: October 2025</p>
+
+        <div class="space-y-8 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+            
+            <section>
+                <h2 class="text-xl font-bold mb-3 text-slate-900">1. Data Minimization (No Storage)</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    PolitePost operates on a strict "No Storage" policy regarding your input data. When you type text into our tool:
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>The text is sent to our AI processor (Groq/Llama 3) via a secure, encrypted connection.</li>
+                        <li>The AI processes the text to generate a rewriting suggestion.</li>
+                        <li>Once the response is returned to your browser, <strong>the text is immediately discarded</strong> from the server memory.</li>
+                        <li>We do not save, log, or train models on your emails.</li>
+                    </ul>
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold mb-3 text-slate-900">2. Cookies & Advertising</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    We use third-party vendors, including Google AdSense, to serve ads to keep this tool free.
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>Google uses cookies to serve ads based on your prior visits to our website or other websites.</li>
+                        <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our site.</li>
+                        <li>You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" class="text-brand-600 underline">Google Ads Settings</a>.</li>
+                    </ul>
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold mb-3 text-slate-900">3. Analytics</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    We may use anonymous analytics (like Cloudflare Web Analytics) to count the number of visitors to our site. This data is aggregate and does not identify individual users or link to the text you type.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold mb-3 text-slate-900">4. Contact Us</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    If you have questions about this privacy policy, you may contact us via the contact details provided on our GitHub repository or domain registrar.
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-200 py-8 text-center text-sm text-slate-400">
+        &copy; 2025 PolitePost. All rights reserved.
+    </footer>
+
+</body>
+</html>
