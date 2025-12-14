@@ -42,7 +42,7 @@
             
             <div id="loading" class="hidden absolute inset-0 bg-slate-900/90 z-20 flex flex-col items-center justify-center rounded-2xl">
                 <i data-lucide="loader-2" class="w-10 h-10 text-brand-500 animate-spin mb-4"></i>
-                <p class="text-brand-500 animate-pulse">AI is writing your proposal...</p>
+                <p class="text-brand-500 animate-pulse">Designing your proposal...</p>
             </div>
 
             <div id="form-container" class="space-y-5 text-left">
@@ -54,6 +54,11 @@
                         <option value="EUR">EUR (€) - Europe</option>
                         <option value="GBP">GBP (£) - UK</option>
                     </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-brand-500 mb-1">Your Business Name</label>
+                    <input type="text" id="senderName" class="w-full bg-slate-900 border border-brand-500/50 rounded-lg p-3 text-white focus:ring-2 focus:ring-brand-500 outline-none" placeholder="e.g. Pristine Cleaners">
                 </div>
 
                 <div>
@@ -96,39 +101,44 @@
     <script>
         lucide.createIcons();
 
-        // I HAVE ALREADY INSERTED YOUR URL HERE:
+        // ⚠️ YOUR BACKEND URL ⚠️
         const API_URL = "https://cleanbid-api.sarthaksingh3891.workers.dev"; 
 
         async function generateProposal() {
+            const senderName = document.getElementById('senderName').value;
             const clientName = document.getElementById('clientName').value;
             const sqft = document.getElementById('sqft').value;
             const freq = document.getElementById('freq').value;
             const currency = document.getElementById('currency').value;
             
-            if(!clientName || !sqft) return alert("Please fill in all fields");
+            if(!senderName || !clientName || !sqft) return alert("Please fill in all fields");
 
             document.getElementById('loading').classList.remove('hidden');
 
             try {
-                // Call Backend with Currency
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ clientName, sqft, freq, currency })
+                    body: JSON.stringify({ senderName, clientName, sqft, freq, currency })
                 });
 
                 if (!response.ok) throw new Error("Backend Error");
                 const data = await response.json();
 
-                // --- PROFESSIONAL PDF GENERATION ---
+                // --- FIX: Force Currency Formatting ---
+                // This makes sure it looks like "₹1,24,000" or "$12,400"
+                const symbol = data.symbol || "$";
+                const pLow = symbol + " " + data.priceLow.toLocaleString();
+                const pHigh = symbol + " " + data.priceHigh.toLocaleString();
+
+                // --- PDF GENERATION ---
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
-                // 1. Header Background (Deep Blue)
+                // Header
                 doc.setFillColor(15, 23, 42); 
                 doc.rect(0, 0, 210, 50, 'F');
 
-                // 2. Header Text
                 doc.setTextColor(255, 255, 255);
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(22);
@@ -139,15 +149,18 @@
                 doc.text("Date:", 150, 25);
                 doc.text(new Date().toLocaleDateString(), 150, 32);
 
-                // 3. Client Info
+                // Info Section
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(10);
                 doc.text("Prepared For:", 20, 70);
+                doc.text("Prepared By:", 120, 70);
+
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
                 doc.text(clientName, 20, 77);
+                doc.text(senderName, 120, 77);
 
-                // 4. Cover Letter
+                // Body
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "bold");
                 doc.text("Service Overview", 20, 100);
@@ -158,10 +171,8 @@
                 const splitText = doc.splitTextToSize(data.coverLetter, 170);
                 doc.text(splitText, 20, 110);
 
-                // 5. Pricing Table (The Fix for Overlap)
-                let y = 180;
-                
-                // Gray Header Bar
+                // Pricing Table
+                let y = 190;
                 doc.setFillColor(241, 245, 249);
                 doc.rect(20, y, 170, 12, 'F'); 
                 
@@ -169,7 +180,7 @@
                 doc.setTextColor(100, 100, 100);
                 doc.setFont("helvetica", "bold");
                 doc.text("SERVICE FREQUENCY", 25, y + 8);
-                doc.text("ESTIMATED INVESTMENT", 185, y + 8, { align: "right" }); 
+                doc.text("ESTIMATED INVESTMENT", 185, y + 8, { align: "right" });
 
                 // Price Row
                 y += 20;
@@ -177,16 +188,16 @@
                 doc.setFontSize(12);
                 doc.text(freq, 25, y);
 
-                // RIGHT ALIGNED PRICE (Fixes the overlap!)
-                const priceText = `${data.symbol}${data.priceLow} - ${data.symbol}${data.priceHigh}`;
+                // Price Text (Formatted with Symbol)
+                const priceText = `${pLow} - ${pHigh}`;
                 doc.setFontSize(14);
-                doc.setTextColor(14, 165, 233); // Brand Blue
+                doc.setTextColor(14, 165, 233); 
                 doc.text(priceText, 185, y, { align: "right" }); 
 
                 // Footer
                 doc.setFontSize(8);
                 doc.setTextColor(150, 150, 150);
-                doc.text("Valid for 30 days. Generated by CleanBid AI.", 105, 280, { align: "center" });
+                doc.text(`Proposal valid for 30 days. Created by ${senderName} via CleanBid AI.`, 105, 280, { align: "center" });
 
                 doc.save(`${clientName}_Proposal.pdf`);
 
@@ -194,7 +205,7 @@
                 document.getElementById('result').classList.remove('hidden');
 
             } catch (error) {
-                alert("Connection Failed. Check your Internet or Backend URL.");
+                alert("Connection Failed.");
                 console.error(error);
             }
 
