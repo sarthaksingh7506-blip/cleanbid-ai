@@ -85,19 +85,22 @@
 
         <div id="tool" class="max-w-3xl mx-auto glass rounded-3xl shadow-xl overflow-hidden relative mb-20">
             
-            <div class="flex border-b border-slate-200">
-                <button onclick="setMode('rewrite')" id="tabRewrite" class="flex-1 py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition">
-                    ✍️ Rewrite Draft
+            <div class="flex border-b border-slate-200 overflow-x-auto">
+                <button onclick="setMode('rewrite')" id="tabRewrite" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition whitespace-nowrap">
+                    ✍️ Rewrite
                 </button>
-                <button onclick="setMode('reply')" id="tabReply" class="flex-1 py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition">
-                    ↩️ Generate Reply
+                <button onclick="setMode('reply')" id="tabReply" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
+                    ↩️ Reply
+                </button>
+                <button onclick="setMode('summarize')" id="tabSummarize" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
+                    📝 Summarize
                 </button>
             </div>
 
             <div class="p-6 md:p-8">
                 <div class="flex justify-between items-center mb-2">
-                    <label id="inputLabel" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Paste your rough draft</label>
-                    <button onclick="analyzeTone()" class="text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1 rounded-full transition flex items-center gap-1 border border-brand-100">
+                    <label id="inputLabel" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Paste your draft</label>
+                    <button onclick="analyzeTone()" id="analyzeBtn" class="text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1 rounded-full transition flex items-center gap-1 border border-brand-100">
                         <i data-lucide="bar-chart-2" class="w-3 h-3"></i> Check Score
                     </button>
                 </div>
@@ -126,7 +129,6 @@
                     <div class="w-full md:w-auto">
                         <select id="languageSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 outline-none font-medium">
                             <option value="English">🇺🇸 English</option>
-                            <option value="British English">🇬🇧 English (UK)</option>
                             <option value="Spanish">🇪🇸 Spanish</option>
                             <option value="French">🇫🇷 French</option>
                             <option value="German">🇩🇪 German</option>
@@ -137,7 +139,7 @@
                         </select>
                     </div>
 
-                    <div class="flex bg-slate-100 rounded-lg p-1 w-full md:w-auto">
+                    <div id="toneButtons" class="flex bg-slate-100 rounded-lg p-1 w-full md:w-auto">
                         <button onclick="setTone('Professional')" class="tone-btn flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-semibold bg-white shadow-sm transition">Professional</button>
                         <button onclick="setTone('Diplomatic')" class="tone-btn flex-1 md:flex-none px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-700 transition">Diplomatic</button>
                         <button onclick="setTone('Firm')" class="tone-btn flex-1 md:flex-none px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-700 transition">Firm</button>
@@ -174,8 +176,8 @@
                     In the modern workplace, <strong>communication is currency</strong>. A poorly worded email can be interpreted as aggression, leading to HR complaints or stalled projects. 
                 </p>
                 <div class="bg-brand-50 border border-brand-100 rounded-xl p-4">
-                    <h3 class="font-bold text-brand-900 text-sm mb-2">New Feature: Tone Analyzer</h3>
-                    <p class="text-xs text-brand-700">Not sure if your email is rude? Use our new "Check Score" button to get an instant Politeness Score (0-100%) before you send.</p>
+                    <h3 class="font-bold text-brand-900 text-sm mb-2">New Feature: Email Summarizer</h3>
+                    <p class="text-xs text-brand-700">Drowning in long email threads? Paste them into our "Summarize" tab to get a TL;DR and key action items instantly.</p>
                 </div>
             </div>
 
@@ -212,8 +214,8 @@
                 <ul class="space-y-2 text-sm text-slate-500">
                     <li><a href="#tool" onclick="setMode('rewrite')" class="hover:text-brand-600">Email Rewriter</a></li>
                     <li><a href="#tool" onclick="setMode('reply')" class="hover:text-brand-600">Reply Generator</a></li>
+                    <li><a href="#tool" onclick="setMode('summarize')" class="hover:text-brand-600">Email Summarizer</a></li>
                     <li><a href="#tool" onclick="analyzeTone()" class="hover:text-brand-600">Tone Analyzer</a></li>
-                    <li><a href="blog.html" class="hover:text-brand-600">Blog</a></li>
                 </ul>
             </div>
             <div>
@@ -250,27 +252,48 @@
 
         function setMode(mode) {
             currentMode = mode;
-            // Update Tabs
-            if(mode === 'rewrite') {
-                document.getElementById('tabRewrite').classList.add('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
-                document.getElementById('tabRewrite').classList.remove('text-slate-500', 'bg-slate-50');
-                document.getElementById('tabReply').classList.remove('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
-                document.getElementById('tabReply').classList.add('text-slate-500', 'bg-slate-50');
-                
-                document.getElementById('inputLabel').innerText = "Paste your rough draft";
-                document.getElementById('inputText').placeholder = "e.g. Stop wasting my time!";
-                document.getElementById('replyIntents').classList.add('hidden');
-                document.getElementById('btnText').innerText = "Rewrite";
-            } else {
-                document.getElementById('tabReply').classList.add('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
-                document.getElementById('tabReply').classList.remove('text-slate-500', 'bg-slate-50');
-                document.getElementById('tabRewrite').classList.remove('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
-                document.getElementById('tabRewrite').classList.add('text-slate-500', 'bg-slate-50');
+            
+            // Reset Tabs
+            ['tabRewrite', 'tabReply', 'tabSummarize'].forEach(id => {
+                const el = document.getElementById(id);
+                el.className = "flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap";
+            });
 
-                document.getElementById('inputLabel').innerText = "Paste the email you received";
-                document.getElementById('inputText').placeholder = "Paste the email from your boss/client here...";
-                document.getElementById('replyIntents').classList.remove('hidden');
-                document.getElementById('btnText').innerText = "Generate Reply";
+            // Activate Selected Tab
+            const activeId = mode === 'rewrite' ? 'tabRewrite' : mode === 'reply' ? 'tabReply' : 'tabSummarize';
+            const activeEl = document.getElementById(activeId);
+            activeEl.className = "flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition whitespace-nowrap";
+
+            // UI Logic
+            const inputLabel = document.getElementById('inputLabel');
+            const inputText = document.getElementById('inputText');
+            const replyIntents = document.getElementById('replyIntents');
+            const btnText = document.getElementById('btnText');
+            const toneButtons = document.getElementById('toneButtons');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+
+            if(mode === 'rewrite') {
+                inputLabel.innerText = "Paste your rough draft";
+                inputText.placeholder = "e.g. Stop wasting my time!";
+                replyIntents.classList.add('hidden');
+                toneButtons.classList.remove('hidden');
+                analyzeBtn.classList.remove('hidden');
+                btnText.innerText = "Rewrite";
+            } else if (mode === 'reply') {
+                inputLabel.innerText = "Paste the email you received";
+                inputText.placeholder = "Paste the email from your boss/client here...";
+                replyIntents.classList.remove('hidden');
+                toneButtons.classList.remove('hidden');
+                analyzeBtn.classList.add('hidden');
+                btnText.innerText = "Generate Reply";
+            } else {
+                // SUMMARIZE MODE
+                inputLabel.innerText = "Paste the long email thread";
+                inputText.placeholder = "Paste the messy long email here...";
+                replyIntents.classList.add('hidden');
+                toneButtons.classList.add('hidden'); // Hide tones for summary
+                analyzeBtn.classList.add('hidden');
+                btnText.innerText = "Summarize";
             }
         }
 
@@ -290,7 +313,6 @@
             event.target.classList.add('ring-2', 'ring-brand-500');
         }
 
-        // --- UPDATED VALIDATION (No Alerts) ---
         function validateInput() {
             const text = document.getElementById('inputText').value;
             if(!text.trim()) {
@@ -361,25 +383,23 @@
                 const data = await response.json();
                 document.getElementById('outputText').value = data.result;
                 document.getElementById('result').classList.remove('hidden');
+                // Auto scroll to result
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
             } catch (error) {
-                // UI Error handling instead of alert
                 document.getElementById('inputText').value = "Error connecting to AI. Please try again.";
             }
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('generateBtn').disabled = false;
         }
 
-        // --- UPDATED COPY BUTTON (No Alert) ---
         function copyText() {
             const copyText = document.getElementById("outputText");
             copyText.select();
             navigator.clipboard.writeText(copyText.value);
             
-            // Visual feedback
             const btnText = document.getElementById("copyBtnText");
             const originalHTML = btnText.innerHTML;
             
-            // Change Text to Green
             btnText.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-green-600"></i> <span class="text-green-600 font-bold">Copied!</span>`;
             lucide.createIcons();
             
