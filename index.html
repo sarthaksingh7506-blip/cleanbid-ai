@@ -63,9 +63,7 @@
             <a href="index.html" class="flex items-center gap-3 text-brand-600 bg-brand-50 p-2 rounded-lg"><i data-lucide="home" class="w-5 h-5"></i> Home</a>
             <a href="blog.html" class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i> Blog</a>
             <a href="about.html" class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg"><i data-lucide="info" class="w-5 h-5"></i> About Us</a>
-            
             <div class="h-px bg-slate-100 my-2"></div>
-            
             <a href="privacy.html" class="text-sm text-slate-400 hover:text-brand-600">Privacy Policy</a>
             <a href="terms.html" class="text-sm text-slate-400 hover:text-brand-600">Terms of Service</a>
             <a href="disclaimer.html" class="text-sm text-slate-400 hover:text-brand-600">Disclaimer</a>
@@ -84,14 +82,31 @@
         </div>
 
         <div id="tool" class="max-w-3xl mx-auto glass rounded-3xl shadow-xl overflow-hidden relative mb-20">
+            
+            <div class="flex border-b border-slate-200">
+                <button onclick="setMode('rewrite')" id="tabRewrite" class="flex-1 py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition">
+                    ✍️ Rewrite Draft
+                </button>
+                <button onclick="setMode('reply')" id="tabReply" class="flex-1 py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition">
+                    ↩️ Generate Reply
+                </button>
+            </div>
+
             <div class="p-6 md:p-8">
-                <textarea id="inputText" class="w-full h-40 bg-white border border-slate-200 rounded-2xl p-5 text-slate-700 focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none resize-none placeholder-slate-300 transition" placeholder="Type here... e.g., 'Stop wasting my time!'"></textarea>
+                <label id="inputLabel" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Paste your rough draft here</label>
+                <textarea id="inputText" class="w-full h-40 bg-white border border-slate-200 rounded-2xl p-5 text-slate-700 focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none resize-none placeholder-slate-300 transition" placeholder="e.g. Stop wasting my time!"></textarea>
                 
+                <div id="replyIntents" class="hidden mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <button onclick="setIntent('Approve')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-green-400 hover:text-green-600 bg-white transition">✅ Say Yes</button>
+                    <button onclick="setIntent('Decline polite')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-red-400 hover:text-red-600 bg-white transition">⛔ Say No</button>
+                    <button onclick="setIntent('Need more info')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-blue-400 hover:text-blue-600 bg-white transition">❓ Ask Details</button>
+                    <button onclick="setIntent('Delay/Busy')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-yellow-400 hover:text-yellow-600 bg-white transition">⏳ Delay It</button>
+                </div>
+
                 <div class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-                    
                     <div class="w-full md:w-auto">
                         <select id="languageSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 outline-none font-medium">
-                            <option value="English">🇺🇸 English (US)</option>
+                            <option value="English">🇺🇸 English</option>
                             <option value="British English">🇬🇧 English (UK)</option>
                             <option value="Spanish">🇪🇸 Spanish</option>
                             <option value="French">🇫🇷 French</option>
@@ -109,16 +124,16 @@
                         <button onclick="setTone('Firm')" class="tone-btn flex-1 md:flex-none px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-700 transition">Firm</button>
                     </div>
 
-                    <button onclick="rewriteText()" id="generateBtn" class="w-full md:w-auto bg-brand-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-brand-700 transition flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i> Rewrite
+                    <button onclick="generate()" id="generateBtn" class="w-full md:w-auto bg-brand-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-brand-700 transition flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> <span id="btnText">Rewrite</span>
                     </button>
                 </div>
 
-                <div id="loading" class="hidden py-8 text-center text-brand-500 animate-pulse font-medium">AI is polishing your text...</div>
+                <div id="loading" class="hidden py-8 text-center text-brand-500 animate-pulse font-medium">AI is working...</div>
                 
                 <div id="result" class="hidden mt-6">
                     <div class="flex justify-between items-end mb-2">
-                        <span class="text-xs font-bold text-green-600 uppercase tracking-wider">Polished Version</span>
+                        <span class="text-xs font-bold text-green-600 uppercase tracking-wider">Result</span>
                         <button onclick="copyText()" class="text-xs flex items-center gap-1 text-slate-400 hover:text-brand-600 transition">
                             <i data-lucide="copy" class="w-3 h-3"></i> Copy
                         </button>
@@ -218,9 +233,40 @@
             }
         }
 
-        let selectedTone = "Professional";
-        // YOUR BACKEND URL
+        // --- NEW LOGIC START ---
         const API_URL = "https://politepost-api.sarthaksingh3891.workers.dev"; 
+        
+        let selectedTone = "Professional";
+        let currentMode = "rewrite";
+        let currentIntent = "Professional Reply";
+
+        function setMode(mode) {
+            currentMode = mode;
+            // Update Tabs
+            if(mode === 'rewrite') {
+                document.getElementById('tabRewrite').classList.add('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
+                document.getElementById('tabRewrite').classList.remove('text-slate-500', 'bg-slate-50');
+                document.getElementById('tabReply').classList.remove('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
+                document.getElementById('tabReply').classList.add('text-slate-500', 'bg-slate-50');
+                
+                // Update UI
+                document.getElementById('inputLabel').innerText = "Paste your rough draft here";
+                document.getElementById('inputText').placeholder = "e.g. Stop wasting my time!";
+                document.getElementById('replyIntents').classList.add('hidden');
+                document.getElementById('btnText').innerText = "Rewrite";
+            } else {
+                document.getElementById('tabReply').classList.add('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
+                document.getElementById('tabReply').classList.remove('text-slate-500', 'bg-slate-50');
+                document.getElementById('tabRewrite').classList.remove('text-brand-600', 'border-b-2', 'border-brand-600', 'bg-white');
+                document.getElementById('tabRewrite').classList.add('text-slate-500', 'bg-slate-50');
+
+                // Update UI
+                document.getElementById('inputLabel').innerText = "Paste the email you received";
+                document.getElementById('inputText').placeholder = "Paste the email from your boss/client here...";
+                document.getElementById('replyIntents').classList.remove('hidden');
+                document.getElementById('btnText').innerText = "Generate Reply";
+            }
+        }
 
         function setTone(tone) {
             selectedTone = tone;
@@ -232,9 +278,15 @@
             event.target.classList.remove('text-slate-500');
         }
 
-        async function rewriteText() {
+        function setIntent(intent) {
+            currentIntent = intent;
+            document.querySelectorAll('.intent-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand-500'));
+            event.target.classList.add('ring-2', 'ring-brand-500');
+        }
+
+        async function generate() {
             const text = document.getElementById('inputText').value;
-            const language = document.getElementById('languageSelect').value; // GET LANGUAGE
+            const language = document.getElementById('languageSelect').value;
 
             if(!text) return alert("Please type something first!");
 
@@ -249,7 +301,9 @@
                     body: JSON.stringify({ 
                         text, 
                         tone: selectedTone,
-                        language: language // SEND LANGUAGE TO BACKEND
+                        language,
+                        mode: currentMode,
+                        intent: currentIntent
                     })
                 });
                 if (!response.ok) throw new Error("Backend Error");
