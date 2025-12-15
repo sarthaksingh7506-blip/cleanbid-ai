@@ -4,61 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PolitePost | Professional Email Rewriter</title>
-    <meta name="description" content="Free AI tool to rewrite angry emails into professional corporate text. The best alternative to ChatGPT for office communication.">
+    <meta name="description" content="Free AI tool to rewrite angry emails into professional corporate text.">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' } }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' } },
+                    animation: { 'fade-in': 'fadeIn 0.5s ease-out' },
+                    keyframes: { fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
                 }
             }
         }
     </script>
+
     <style>
-        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
-        .mobile-menu { transition: transform 0.3s ease-in-out; }
+        /* Custom Utilities */
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.6); }
+        
+        /* Mobile Menu Animations */
+        .mobile-menu { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .menu-open { transform: translateX(0%); }
         .menu-closed { transform: translateX(-100%); }
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Hide scrollbar */
+        
+        /* Utility */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none;  scrollbar-width: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Loading Animation */
+        .dot-flashing { position: relative; width: 10px; height: 10px; border-radius: 5px; background-color: #0ea5e9; color: #0ea5e9; animation: dot-flashing 1s infinite linear alternate; animation-delay: 0.5s; }
+        .dot-flashing::before, .dot-flashing::after { content: ""; display: inline-block; position: absolute; top: 0; }
+        .dot-flashing::before { left: -15px; width: 10px; height: 10px; border-radius: 5px; background-color: #0ea5e9; animation: dot-flashing 1s infinite alternate; animation-delay: 0s; }
+        .dot-flashing::after { left: 15px; width: 10px; height: 10px; border-radius: 5px; background-color: #0ea5e9; animation: dot-flashing 1s infinite alternate; animation-delay: 1s; }
+        @keyframes dot-flashing { 0% { background-color: #0ea5e9; } 50%, 100% { background-color: #e0f2fe; } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden selection:bg-brand-100 selection:text-brand-900">
 
-    <div class="fixed inset-0 -z-10">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl"></div>
+    <div class="fixed inset-0 -z-10 pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl opacity-70"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl opacity-70"></div>
     </div>
 
     <nav class="border-b border-white/50 bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <button onclick="toggleMenu()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleMenu()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg focus:ring-2 focus:ring-brand-500">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-                <a href="index.html" class="flex items-center gap-2">
-                    <div class="bg-brand-600 rounded-lg p-1.5 text-white"><i data-lucide="feather" class="w-5 h-5"></i></div>
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <div class="bg-brand-600 rounded-lg p-1.5 text-white transition-transform group-hover:scale-110">
+                        <i data-lucide="feather" class="w-5 h-5"></i>
+                    </div>
                     <span class="font-bold text-xl tracking-tight">Polite<span class="text-brand-600">Post</span></span>
                 </a>
             </div>
 
             <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                <a href="index.html" class="text-brand-600">Home</a>
-                <a href="blog.html" class="hover:text-brand-600 transition">Blog</a>
-                <a href="about.html" class="hover:text-brand-600 transition">About</a>
-                <a href="#tool" class="bg-brand-600 text-white px-4 py-2 rounded-full hover:bg-brand-700 transition shadow-lg shadow-brand-500/20">Use Tool</a>
+                <a href="#tool" onclick="setMode('rewrite')" class="hover:text-brand-600 transition">Rewrite</a>
+                <a href="#tool" onclick="setMode('reply')" class="hover:text-brand-600 transition">Reply</a>
+                <a href="#tool" class="bg-brand-600 text-white px-5 py-2.5 rounded-full hover:bg-brand-700 transition shadow-lg shadow-brand-500/20 active:scale-95">Use Tool</a>
             </div>
         </div>
     </nav>
@@ -66,16 +76,12 @@
     <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-slate-200 shadow-2xl z-50 mobile-menu menu-closed md:hidden">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center">
             <span class="font-bold text-lg">Menu</span>
-            <button onclick="toggleMenu()"><i data-lucide="x" class="w-6 h-6 text-slate-400"></i></button>
+            <button onclick="toggleMenu()" class="p-1 hover:bg-slate-100 rounded"><i data-lucide="x" class="w-6 h-6 text-slate-400"></i></button>
         </div>
-        <div class="p-6 space-y-4 flex flex-col font-medium text-slate-600">
-            <a href="index.html" class="flex items-center gap-3 text-brand-600 bg-brand-50 p-2 rounded-lg"><i data-lucide="home" class="w-5 h-5"></i> Home</a>
-            <a href="blog.html" class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg"><i data-lucide="book-open" class="w-5 h-5"></i> Blog</a>
-            <a href="about.html" class="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg"><i data-lucide="info" class="w-5 h-5"></i> About Us</a>
-            <div class="h-px bg-slate-100 my-2"></div>
-            <a href="privacy.html" class="text-sm text-slate-400 hover:text-brand-600">Privacy Policy</a>
-            <a href="terms.html" class="text-sm text-slate-400 hover:text-brand-600">Terms of Service</a>
-            <a href="disclaimer.html" class="text-sm text-slate-400 hover:text-brand-600">Disclaimer</a>
+        <div class="p-6 space-y-2 flex flex-col font-medium text-slate-600">
+            <button onclick="setMode('rewrite'); toggleMenu()" class="w-full text-left flex items-center gap-3 text-brand-600 bg-brand-50 p-3 rounded-lg"><i data-lucide="edit-3" class="w-5 h-5"></i> Rewrite</button>
+            <button onclick="setMode('reply'); toggleMenu()" class="w-full text-left flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg"><i data-lucide="reply" class="w-5 h-5"></i> Reply</button>
+            <button onclick="setMode('summarize'); toggleMenu()" class="w-full text-left flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg"><i data-lucide="file-text" class="w-5 h-5"></i> Summarize</button>
         </div>
     </div>
     
@@ -84,106 +90,107 @@
     <div class="flex-grow pt-10 pb-20 px-4">
         
         <div class="text-center max-w-3xl mx-auto mb-10">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900">
-                Fix your email <br> <span class="text-brand-600">before you send it.</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight text-slate-900 leading-tight">
+                Fix your email <br> <span class="text-brand-600 relative inline-block">before you send it.<svg class="absolute -bottom-2 w-full h-3 text-brand-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none" /></svg></span>
             </h1>
-            <p class="text-slate-500 text-lg">AI-powered professional rewriter. 100% Free & Private.</p>
+            <p class="text-slate-500 text-lg md:text-xl">AI-powered professional rewriter. 100% Free & Private.</p>
         </div>
 
-        <div id="tool" class="max-w-3xl mx-auto glass rounded-3xl shadow-xl overflow-hidden relative mb-20">
+        <div id="tool" class="max-w-3xl mx-auto glass rounded-3xl shadow-xl overflow-hidden relative mb-20 ring-1 ring-slate-900/5">
             
-            <div id="historyPanel" class="hidden absolute inset-0 bg-white/95 z-20 p-6 overflow-y-auto backdrop-blur-md rounded-3xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg flex items-center gap-2"><i data-lucide="history" class="w-5 h-5"></i> Recent History</h3>
-                    <button onclick="toggleHistory()" class="p-2 hover:bg-slate-100 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div id="historyPanel" class="hidden absolute inset-0 bg-white/98 z-30 p-6 overflow-y-auto backdrop-blur-md">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-lg flex items-center gap-2"><i data-lucide="history" class="w-5 h-5 text-brand-500"></i> Recent History</h3>
+                    <button onclick="toggleHistory()" class="p-2 hover:bg-slate-100 rounded-full transition"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
                 <div id="historyList" class="space-y-3">
-                    <p class="text-sm text-slate-400 text-center py-10">No history yet. Write something!</p>
-                </div>
-                <button onclick="clearHistory()" class="w-full mt-6 py-2 text-xs text-red-400 hover:text-red-600 border border-red-100 rounded-lg">Clear History</button>
+                    </div>
+                <button onclick="clearHistory()" class="w-full mt-6 py-3 text-sm text-red-500 hover:bg-red-50 hover:text-red-600 border border-red-100 rounded-xl transition">Clear All History</button>
             </div>
 
-            <div class="flex border-b border-slate-200 overflow-x-auto relative">
-                <button onclick="setMode('rewrite')" id="tabRewrite" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition whitespace-nowrap">
-                    ✍️ Rewrite
-                </button>
-                <button onclick="setMode('reply')" id="tabReply" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
-                    ↩️ Reply
-                </button>
-                <button onclick="setMode('summarize')" id="tabSummarize" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
-                    📝 Summarize
-                </button>
+            <div class="flex border-b border-slate-200">
+                <div class="flex-1 overflow-x-auto flex scrollbar-hide">
+                    <button onclick="setMode('rewrite')" id="tabRewrite" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white transition whitespace-nowrap">
+                        ✍️ Rewrite
+                    </button>
+                    <button onclick="setMode('reply')" id="tabReply" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
+                        ↩️ Reply
+                    </button>
+                    <button onclick="setMode('summarize')" id="tabSummarize" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
+                        📝 Summarize
+                    </button>
+                </div>
                 
-                <button onclick="toggleHistory()" class="absolute right-0 top-0 h-full px-4 text-slate-400 hover:text-brand-600 bg-white/50 backdrop-blur-sm border-l border-slate-100">
+                <button onclick="toggleHistory()" class="px-5 text-slate-400 hover:text-brand-600 bg-white border-l border-slate-100 z-10 flex items-center justify-center transition" title="View History">
                     <i data-lucide="history" class="w-5 h-5"></i>
                 </button>
             </div>
 
             <div class="p-6 md:p-8">
                 
-                <div id="templateArea" class="mb-6 animate-fade-up">
+                <div id="templateArea" class="mb-6 animate-fade-in">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Or try a quick template:</p>
                     <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                        <button onclick="applyTemplate('raise')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-brand-500 hover:text-brand-600 hover:bg-white hover:shadow-md transition">
+                        <button onclick="applyTemplate('raise')" class="template-chip whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-brand-500 hover:text-brand-600 hover:bg-white hover:shadow-md transition">
                             💰 Ask for Raise
                         </button>
-                        <button onclick="applyTemplate('resign')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-red-400 hover:text-red-500 hover:bg-white hover:shadow-md transition">
+                        <button onclick="applyTemplate('resign')" class="template-chip whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-red-400 hover:text-red-500 hover:bg-white hover:shadow-md transition">
                             🚪 Quit Job
                         </button>
-                        <button onclick="applyTemplate('late')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-yellow-400 hover:text-yellow-600 hover:bg-white hover:shadow-md transition">
+                        <button onclick="applyTemplate('late')" class="template-chip whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-yellow-400 hover:text-yellow-600 hover:bg-white hover:shadow-md transition">
                             🐢 Running Late
                         </button>
-                        <button onclick="applyTemplate('angry')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-orange-400 hover:text-orange-600 hover:bg-white hover:shadow-md transition">
-                            😡 Angry at Coworker
+                        <button onclick="applyTemplate('angry')" class="template-chip whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-orange-400 hover:text-orange-600 hover:bg-white hover:shadow-md transition">
+                            😡 Angry
                         </button>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center mb-2">
-                    <label id="inputLabel" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Paste your draft</label>
-                    <button onclick="analyzeTone()" id="analyzeBtn" class="text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1 rounded-full transition flex items-center gap-1 border border-brand-100">
+                    <label id="inputLabel" for="inputText" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Paste your draft</label>
+                    <button onclick="analyzeTone()" id="analyzeBtn" class="text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-full transition flex items-center gap-1 border border-brand-100">
                         <i data-lucide="bar-chart-2" class="w-3 h-3"></i> Check Score
                     </button>
                 </div>
 
-                <div class="relative w-full">
-                    <textarea id="inputText" class="w-full h-40 bg-white border border-slate-200 rounded-2xl p-5 pr-12 text-slate-700 focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none resize-none placeholder-slate-300 transition" placeholder="e.g. Stop wasting my time!"></textarea>
+                <div class="relative w-full group">
+                    <textarea id="inputText" class="w-full h-40 bg-white border border-slate-200 rounded-2xl p-5 pr-12 text-slate-700 focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 outline-none resize-none placeholder-slate-300 transition shadow-inner" placeholder="e.g. Stop wasting my time!"></textarea>
                     
-                    <button id="micBtn" onclick="toggleSpeech()" class="absolute top-3 right-3 p-2 rounded-full bg-slate-100 text-slate-400 hover:bg-brand-100 hover:text-brand-600 transition group" title="Speak">
-                        <i data-lucide="mic" class="w-5 h-5 group-hover:scale-110 transition"></i>
+                    <button id="micBtn" onclick="toggleSpeech()" class="absolute top-3 right-3 p-2 rounded-full bg-slate-100 text-slate-400 hover:bg-brand-100 hover:text-brand-600 transition" title="Speak Input">
+                        <i data-lucide="mic" class="w-5 h-5"></i>
                         <span id="micPulse" class="absolute inset-0 rounded-full bg-red-500 opacity-75 animate-ping hidden"></span>
                     </button>
                 </div>
                 
-                <p id="speechStatus" class="text-xs text-brand-600 font-bold mt-2 hidden animate-pulse">Listening... Speak now.</p>
+                <p id="speechStatus" class="text-xs text-brand-600 font-bold mt-2 hidden animate-pulse pl-1">Listening... Speak now.</p>
                 
-                <div id="scorePanel" class="hidden mb-6 mt-4 bg-slate-50 border border-slate-200 rounded-xl p-4 fade-in">
+                <div id="scorePanel" class="hidden mb-6 mt-4 bg-slate-50 border border-slate-200 rounded-xl p-4 animate-fade-in">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-bold text-slate-700">Politeness Score</span>
                         <span id="scoreVal" class="text-lg font-black text-slate-900">0%</span>
                     </div>
                     <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2 overflow-hidden">
-                        <div id="scoreBar" class="bg-red-500 h-2.5 rounded-full" style="width: 0%"></div>
+                        <div id="scoreBar" class="bg-red-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                     <p id="scoreText" class="text-xs text-slate-500 italic">Analyzing...</p>
                 </div>
 
-                <div id="replyIntents" class="hidden mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
-                    <button onclick="setIntent('Approve')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-green-400 hover:text-green-600 bg-white transition">✅ Say Yes</button>
-                    <button onclick="setIntent('Decline polite')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-red-400 hover:text-red-600 bg-white transition">⛔ Say No</button>
-                    <button onclick="setIntent('Need more info')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-blue-400 hover:text-blue-600 bg-white transition">❓ Ask Details</button>
-                    <button onclick="setIntent('Delay/Busy')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-yellow-400 hover:text-yellow-600 bg-white transition">⏳ Delay It</button>
+                <div id="replyIntents" class="hidden mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 animate-fade-in">
+                    <button onclick="setIntent('Approve')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-green-400 hover:text-green-600 bg-white transition hover:shadow-sm">✅ Say Yes</button>
+                    <button onclick="setIntent('Decline polite')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-red-400 hover:text-red-600 bg-white transition hover:shadow-sm">⛔ Say No</button>
+                    <button onclick="setIntent('Need more info')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-blue-400 hover:text-blue-600 bg-white transition hover:shadow-sm">❓ Ask Details</button>
+                    <button onclick="setIntent('Delay/Busy')" class="intent-btn p-2 border border-slate-200 rounded-lg text-xs font-medium hover:border-yellow-400 hover:text-yellow-600 bg-white transition hover:shadow-sm">⏳ Delay It</button>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-                    <div class="w-full md:w-auto">
-                        <select id="languageSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 outline-none font-medium">
+                    <div class="w-full md:w-1/4">
+                        <select id="languageSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 outline-none font-medium cursor-pointer hover:bg-slate-100 transition">
                             <option value="English">🇺🇸 English</option>
+                            <option value="British English">🇬🇧 English (UK)</option>
                             <option value="Spanish">🇪🇸 Spanish</option>
                             <option value="French">🇫🇷 French</option>
                             <option value="German">🇩🇪 German</option>
                             <option value="Hindi">🇮🇳 Hindi</option>
-                            <option value="Portuguese">🇧🇷 Portuguese</option>
                             <option value="Chinese">🇨🇳 Chinese</option>
                             <option value="Japanese">🇯🇵 Japanese</option>
                         </select>
@@ -195,85 +202,50 @@
                         <button onclick="setTone('Firm')" class="tone-btn flex-1 md:flex-none px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-700 transition">Firm</button>
                     </div>
 
-                    <button onclick="generate()" id="generateBtn" class="w-full md:w-auto bg-brand-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-brand-700 transition flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20">
+                    <button onclick="generate()" id="generateBtn" class="w-full md:w-auto bg-brand-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-brand-700 transition flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 active:scale-95">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> <span id="btnText">Rewrite</span>
                     </button>
                 </div>
 
-                <div id="loading" class="hidden py-8 text-center text-brand-500 animate-pulse font-medium">AI is working...</div>
+                <div id="loading" class="hidden py-10 flex flex-col items-center justify-center">
+                    <div class="dot-flashing"></div>
+                    <p class="mt-4 text-xs font-bold text-brand-500 uppercase tracking-widest animate-pulse">Polishing your words...</p>
+                </div>
                 
-                <div id="result" class="hidden mt-6">
+                <div id="result" class="hidden mt-6 animate-fade-in border-t border-slate-100 pt-6">
                     <div class="flex justify-between items-end mb-2">
-                        <span class="text-xs font-bold text-green-600 uppercase tracking-wider">Result</span>
-                        <button onclick="copyText()" class="group text-xs flex items-center gap-1 text-slate-400 hover:text-brand-600 transition">
-                            <span id="copyBtnText" class="flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i> Copy</span>
+                        <span class="text-xs font-bold text-green-600 uppercase tracking-wider flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Result</span>
+                        <button onclick="copyText()" id="copyBtn" class="group text-xs flex items-center gap-1 text-slate-400 hover:text-brand-600 transition bg-slate-50 hover:bg-brand-50 px-2 py-1 rounded-md border border-transparent hover:border-brand-100">
+                            <span id="copyBtnText" class="flex items-center gap-1 font-semibold"><i data-lucide="copy" class="w-3 h-3"></i> Copy Text</span>
                         </button>
                     </div>
-                    <textarea id="outputText" readonly class="w-full h-40 bg-white border border-green-200 rounded-xl p-5 text-slate-800 outline-none"></textarea>
+                    <textarea id="outputText" readonly class="w-full h-40 bg-green-50/30 border border-green-200 rounded-xl p-5 text-slate-800 outline-none focus:ring-2 focus:ring-green-500/20"></textarea>
                     
-                    <div class="mt-4 p-4 bg-slate-50 border border-dashed border-slate-300 rounded-lg text-center">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Sponsored</span>
-                        <div class="h-16 flex items-center justify-center text-xs text-slate-400">Google AdSense Area</div>
+                    <div class="mt-4 p-4 bg-slate-50 border border-dashed border-slate-300 rounded-lg text-center opacity-75 hover:opacity-100 transition">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sponsored</span>
+                        <div class="h-12 flex items-center justify-center text-xs text-slate-400">Ad Space</div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="max-w-6xl mx-auto mt-24">
-            <div class="flex justify-between items-end mb-8 px-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900">Communication Tips</h2>
-                    <p class="text-slate-500">Master the art of corporate speak.</p>
-                </div>
-                <a href="blog.html" class="text-brand-600 font-semibold hover:underline hidden md:block">View all articles →</a>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6 px-4">
-                <a href="article-told-you-so.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
-                    <span class="text-[10px] font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-full uppercase">Guide</span>
-                    <h3 class="font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition">How to say "I told you so" professionally</h3>
-                    <p class="text-xs text-slate-500 line-clamp-2">You warned them, they didn't listen. Here is how to point that out without being rude.</p>
-                </a>
-                <a href="article-say-no.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
-                    <span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full uppercase">Templates</span>
-                    <h3 class="font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition">5 Ways to say "No" to extra work</h3>
-                    <p class="text-xs text-slate-500 line-clamp-2">Don't let your boss overload you. Use these 5 scripts to decline politely.</p>
-                </a>
-                <a href="article-per-my-last-email.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
-                    <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-full uppercase">Career</span>
-                    <h3 class="font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition">The art of the "Per my last email"</h3>
-                    <p class="text-xs text-slate-500 line-clamp-2">Is it rude? Yes. Here is what to say instead to get a reply.</p>
-                </a>
-            </div>
-            
-            <div class="text-center mt-6 md:hidden">
-                <a href="blog.html" class="text-brand-600 font-semibold hover:underline">View all articles →</a>
             </div>
         </div>
 
         <div class="max-w-4xl mx-auto mt-24 mb-20 px-4">
-            <h2 class="text-3xl font-bold text-center text-slate-900 mb-10">Frequently Asked Questions</h2>
-            
-            <div class="space-y-4">
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
-                        <i data-lucide="lock" class="w-4 h-4 text-brand-600"></i> Is my data private?
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-2">Yes. We do not store, log, or read your emails. Your text is processed by a secure AI model and immediately discarded. History is stored only on your own device.</p>
+            <h2 class="text-3xl font-bold text-center text-slate-900 mb-10">Common Questions</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-brand-50 rounded-full flex items-center justify-center mb-4 text-brand-600"><i data-lucide="lock" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-slate-900 mb-2">Private?</h3>
+                    <p class="text-slate-500 text-sm">We don't store your texts. Processing happens in memory and is discarded immediately.</p>
                 </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
-                        <i data-lucide="zap" class="w-4 h-4 text-yellow-500"></i> Is this tool free?
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-2">Yes, PolitePost is 100% free to use for unlimited rewrites. We are supported by minimal ads to keep the servers running.</p>
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center mb-4 text-yellow-600"><i data-lucide="zap" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-slate-900 mb-2">Free?</h3>
+                    <p class="text-slate-500 text-sm">Yes, 100% free. We use minimal ads to keep the servers running smoothly.</p>
                 </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                    <h3 class="font-bold text-slate-900 flex items-center gap-2">
-                        <i data-lucide="smartphone" class="w-4 h-4 text-green-500"></i> Does it work on mobile?
-                    </h3>
-                    <p class="text-slate-500 text-sm mt-2">Absolutely. You can even add PolitePost to your home screen as an app to fix emails on the go.</p>
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center mb-4 text-green-600"><i data-lucide="smartphone" class="w-5 h-5"></i></div>
+                    <h3 class="font-bold text-slate-900 mb-2">Mobile?</h3>
+                    <p class="text-slate-500 text-sm">Works perfectly on phones. Add it to your home screen for quick access.</p>
                 </div>
             </div>
         </div>
@@ -281,174 +253,43 @@
     </div>
 
     <footer class="bg-white border-t border-slate-200 pt-16 pb-8 mt-auto">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-12">
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="font-bold text-xl tracking-tight">Polite<span class="text-brand-600">Post</span></span>
-                </div>
-                <p class="text-slate-400 text-sm max-w-xs">AI-powered communication assistant for the modern workplace. Secure, fast, and free.</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-slate-900 mb-4">Product</h4>
-                <ul class="space-y-2 text-sm text-slate-500">
-                    <li><a href="#tool" onclick="setMode('rewrite')" class="hover:text-brand-600">Email Rewriter</a></li>
-                    <li><a href="#tool" onclick="setMode('reply')" class="hover:text-brand-600">Reply Generator</a></li>
-                    <li><a href="#tool" onclick="setMode('summarize')" class="hover:text-brand-600">Email Summarizer</a></li>
-                    <li><a href="#tool" onclick="analyzeTone()" class="hover:text-brand-600">Tone Analyzer</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold text-slate-900 mb-4">Legal</h4>
-                <ul class="space-y-2 text-sm text-slate-500">
-                    <li><a href="privacy.html" class="hover:text-brand-600">Privacy Policy</a></li>
-                    <li><a href="terms.html" class="hover:text-brand-600">Terms of Service</a></li>
-                    <li><a href="disclaimer.html" class="hover:text-brand-600">Disclaimer</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="text-center text-xs text-slate-400 border-t border-slate-100 pt-8">
+        <div class="text-center text-xs text-slate-400">
             &copy; 2025 PolitePost. All rights reserved.
         </div>
     </footer>
 
     <script>
+        // Initialize Icons
         lucide.createIcons();
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-sidebar');
-            const overlay = document.getElementById('menu-overlay');
-            if (menu.classList.contains('menu-closed')) {
-                menu.classList.remove('menu-closed'); menu.classList.add('menu-open'); overlay.classList.remove('hidden');
-            } else {
-                menu.classList.add('menu-closed'); menu.classList.remove('menu-open'); overlay.classList.add('hidden');
-            }
-        }
 
-        const API_URL = "https://politepost-api.sarthaksingh3891.workers.dev"; 
+        // Constants
+        const API_URL = "https://politepost-api.sarthaksingh3891.workers.dev"; // ⚠️ NOTE: Replace with your own env variable in production
         
+        // State
         let selectedTone = "Professional";
         let currentMode = "rewrite";
         let currentIntent = "Professional Reply";
 
-        // --- HISTORY LOGIC ---
-        function toggleHistory() {
-            const panel = document.getElementById('historyPanel');
-            if(panel.classList.contains('hidden')) {
-                panel.classList.remove('hidden');
-                loadHistory();
+        // --- UI FUNCTIONS ---
+        
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('menu-overlay');
+            if (menu.classList.contains('menu-closed')) {
+                menu.classList.remove('menu-closed'); 
+                menu.classList.add('menu-open'); 
+                overlay.classList.remove('hidden');
             } else {
-                panel.classList.add('hidden');
+                menu.classList.add('menu-closed'); 
+                menu.classList.remove('menu-open'); 
+                overlay.classList.add('hidden');
             }
         }
 
-        function saveHistory(original, result, type) {
-            let history = JSON.parse(localStorage.getItem('pp_history') || '[]');
-            const newItem = { 
-                original: original.substring(0, 50) + "...", 
-                fullOriginal: original,
-                result: result, 
-                type: type,
-                date: new Date().toLocaleTimeString() 
-            };
-            history.unshift(newItem);
-            if(history.length > 10) history.pop();
-            localStorage.setItem('pp_history', JSON.stringify(history));
-        }
-
-        function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('pp_history') || '[]');
-            const list = document.getElementById('historyList');
-            list.innerHTML = "";
-            
-            if(history.length === 0) {
-                list.innerHTML = '<p class="text-sm text-slate-400 text-center py-10">No history yet.</p>';
-                return;
-            }
-
-            history.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "bg-slate-50 p-3 rounded-xl border border-slate-100 text-sm cursor-pointer hover:bg-brand-50 hover:border-brand-200 transition";
-                div.onclick = () => {
-                    document.getElementById('inputText').value = item.fullOriginal;
-                    document.getElementById('outputText').value = item.result;
-                    document.getElementById('result').classList.remove('hidden');
-                    toggleHistory();
-                };
-                div.innerHTML = `
-                    <div class="flex justify-between text-xs text-slate-400 mb-1">
-                        <span class="uppercase font-bold">${item.type}</span>
-                        <span>${item.date}</span>
-                    </div>
-                    <div class="font-medium text-slate-700 truncate">${item.original}</div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function clearHistory() {
-            localStorage.removeItem('pp_history');
-            loadHistory();
-        }
-
-        // --- TEMPLATE LOGIC ---
-        function applyTemplate(type) {
-            const input = document.getElementById('inputText');
-            let text = "";
-            if(type === 'raise') text = "I want a raise. I have done good work lately and I think I deserve more money.";
-            else if(type === 'resign') text = "I am quitting. My last day is in two weeks. Thanks for everything.";
-            else if(type === 'late') text = "Sorry I'm late. Traffic was bad. I will be there in 20 mins.";
-            else if(type === 'angry') text = "Why did you do that? You messed up the project and now I have to fix it. It's annoying.";
-            input.value = text;
-            input.classList.add('bg-brand-50', 'ring-2', 'ring-brand-200');
-            setTimeout(() => {
-                input.classList.remove('bg-brand-50', 'ring-2', 'ring-brand-200');
-            }, 400);
-        }
-
-        // --- VOICE LOGIC ---
-        let recognition;
-        let isRecording = false;
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = 'en-US';
-            recognition.onstart = function() {
-                isRecording = true;
-                document.getElementById('micPulse').classList.remove('hidden');
-                document.getElementById('micBtn').classList.add('text-red-500', 'bg-red-50');
-                document.getElementById('speechStatus').classList.remove('hidden');
-                document.getElementById('inputText').placeholder = "Listening...";
-            };
-            recognition.onend = function() {
-                isRecording = false;
-                document.getElementById('micPulse').classList.add('hidden');
-                document.getElementById('micBtn').classList.remove('text-red-500', 'bg-red-50');
-                document.getElementById('speechStatus').classList.add('hidden');
-                document.getElementById('inputText').placeholder = "Type here... or click the mic to speak!";
-            };
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                const input = document.getElementById('inputText');
-                if(input.value.length > 0) input.value += " " + transcript;
-                else input.value = transcript;
-            };
-            recognition.onerror = function(event) {
-                isRecording = false;
-                document.getElementById('micPulse').classList.add('hidden');
-            };
-        } else {
-            document.getElementById('micBtn').style.display = 'none';
-        }
-        function toggleSpeech() {
-            if (!recognition) return;
-            if (isRecording) recognition.stop();
-            else recognition.start();
-        }
-
-        // --- MAIN APP LOGIC ---
         function setMode(mode) {
             currentMode = mode;
+            
+            // Reset Tabs
             ['tabRewrite', 'tabReply', 'tabSummarize'].forEach(id => {
                 const el = document.getElementById(id);
                 el.className = "flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap";
@@ -457,38 +298,41 @@
             const activeEl = document.getElementById(activeId);
             activeEl.className = "flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition whitespace-nowrap";
 
-            const inputLabel = document.getElementById('inputLabel');
-            const inputText = document.getElementById('inputText');
-            const replyIntents = document.getElementById('replyIntents');
-            const btnText = document.getElementById('btnText');
-            const toneButtons = document.getElementById('toneButtons');
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            const templateArea = document.getElementById('templateArea');
+            // Update UI Elements based on mode
+            const elements = {
+                inputLabel: document.getElementById('inputLabel'),
+                inputText: document.getElementById('inputText'),
+                replyIntents: document.getElementById('replyIntents'),
+                btnText: document.getElementById('btnText'),
+                toneButtons: document.getElementById('toneButtons'),
+                analyzeBtn: document.getElementById('analyzeBtn'),
+                templateArea: document.getElementById('templateArea')
+            };
 
             if(mode === 'rewrite') {
-                inputLabel.innerText = "Paste your rough draft";
-                inputText.placeholder = "e.g. Stop wasting my time!";
-                templateArea.classList.remove('hidden');
-                replyIntents.classList.add('hidden');
-                toneButtons.classList.remove('hidden');
-                analyzeBtn.classList.remove('hidden');
-                btnText.innerText = "Rewrite";
+                elements.inputLabel.innerText = "Paste your rough draft";
+                elements.inputText.placeholder = "e.g. Stop wasting my time!";
+                elements.templateArea.classList.remove('hidden');
+                elements.replyIntents.classList.add('hidden');
+                elements.toneButtons.classList.remove('hidden');
+                elements.analyzeBtn.classList.remove('hidden');
+                elements.btnText.innerText = "Rewrite";
             } else if (mode === 'reply') {
-                inputLabel.innerText = "Paste the email you received";
-                inputText.placeholder = "Paste the email from your boss/client here...";
-                templateArea.classList.add('hidden');
-                replyIntents.classList.remove('hidden');
-                toneButtons.classList.remove('hidden');
-                analyzeBtn.classList.add('hidden');
-                btnText.innerText = "Generate Reply";
+                elements.inputLabel.innerText = "Paste the email you received";
+                elements.inputText.placeholder = "Paste the email from your boss/client here...";
+                elements.templateArea.classList.add('hidden');
+                elements.replyIntents.classList.remove('hidden');
+                elements.toneButtons.classList.remove('hidden');
+                elements.analyzeBtn.classList.add('hidden');
+                elements.btnText.innerText = "Generate Reply";
             } else {
-                inputLabel.innerText = "Paste the long email thread";
-                inputText.placeholder = "Paste the messy long email here...";
-                templateArea.classList.add('hidden');
-                replyIntents.classList.add('hidden');
-                toneButtons.classList.add('hidden');
-                analyzeBtn.classList.add('hidden');
-                btnText.innerText = "Summarize";
+                elements.inputLabel.innerText = "Paste the long email thread";
+                elements.inputText.placeholder = "Paste the messy long email here...";
+                elements.templateArea.classList.add('hidden');
+                elements.replyIntents.classList.add('hidden');
+                elements.toneButtons.classList.add('hidden');
+                elements.analyzeBtn.classList.add('hidden');
+                elements.btnText.innerText = "Summarize";
             }
         }
 
@@ -504,18 +348,35 @@
 
         function setIntent(intent) {
             currentIntent = intent;
-            document.querySelectorAll('.intent-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand-500'));
-            event.target.classList.add('ring-2', 'ring-brand-500');
+            document.querySelectorAll('.intent-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50'));
+            event.target.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50');
         }
 
+        function applyTemplate(type) {
+            const input = document.getElementById('inputText');
+            const texts = {
+                'raise': "I want a raise. I have done good work lately and I think I deserve more money.",
+                'resign': "I am quitting. My last day is in two weeks. Thanks for everything.",
+                'late': "Sorry I'm late. Traffic was bad. I will be there in 20 mins.",
+                'angry': "Why did you do that? You messed up the project and now I have to fix it. It's annoying."
+            };
+            input.value = texts[type] || "";
+            // Visual feedback
+            input.classList.add('bg-brand-50', 'ring-2', 'ring-brand-200');
+            setTimeout(() => input.classList.remove('bg-brand-50', 'ring-2', 'ring-brand-200'), 400);
+        }
+
+        // --- LOGIC & API ---
+
         function validateInput() {
-            const text = document.getElementById('inputText').value;
-            if(!text.trim()) {
-                const input = document.getElementById('inputText');
+            const input = document.getElementById('inputText');
+            if(!input.value.trim()) {
                 input.classList.add('ring-2', 'ring-red-500', 'bg-red-50');
+                const originalPlaceholder = input.placeholder;
                 input.placeholder = "⚠️ Please type something here first...";
                 setTimeout(() => {
                     input.classList.remove('ring-2', 'ring-red-500', 'bg-red-50');
+                    input.placeholder = originalPlaceholder;
                 }, 2000);
                 return false;
             }
@@ -525,37 +386,57 @@
         async function analyzeTone() {
             if(!validateInput()) return;
             const text = document.getElementById('inputText').value;
+            
+            // Show Analysis UI
             document.getElementById('scorePanel').classList.remove('hidden');
             document.getElementById('scoreText').innerText = "Analyzing...";
             document.getElementById('scoreBar').style.width = "0%";
+            
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ text, mode: "analyze" })
                 });
+                
                 const data = await response.json();
-                const analysis = JSON.parse(data.result);
-                const score = analysis.score;
+                
+                // Safe parsing: Handle API returning either string or object
+                let analysis;
+                if (typeof data.result === 'string') {
+                    try { analysis = JSON.parse(data.result); } 
+                    catch(e) { throw new Error("API Parse Error"); }
+                } else {
+                    analysis = data.result;
+                }
+
+                const score = analysis.score || 0;
                 document.getElementById('scoreVal').innerText = score + "%";
                 document.getElementById('scoreBar').style.width = score + "%";
-                document.getElementById('scoreText').innerText = `${analysis.tone_label}: ${analysis.critique}`;
+                document.getElementById('scoreText').innerText = `${analysis.tone_label || 'Analysis'}: ${analysis.critique || ''}`;
+                
                 const bar = document.getElementById('scoreBar');
-                if(score > 80) bar.className = "bg-green-500 h-2.5 rounded-full transition-all duration-1000";
-                else if(score > 50) bar.className = "bg-yellow-500 h-2.5 rounded-full transition-all duration-1000";
-                else bar.className = "bg-red-500 h-2.5 rounded-full transition-all duration-1000";
+                bar.className = score > 80 ? "bg-green-500 h-2.5 rounded-full transition-all duration-1000" : 
+                                score > 50 ? "bg-yellow-500 h-2.5 rounded-full transition-all duration-1000" : 
+                                "bg-red-500 h-2.5 rounded-full transition-all duration-1000";
+
             } catch (error) { 
-                document.getElementById('scoreText').innerText = "Could not analyze. Try again.";
+                console.error(error);
+                document.getElementById('scoreText').innerText = "Could not analyze. Please check connection.";
             }
         }
 
         async function generate() {
             if(!validateInput()) return;
+            
             const text = document.getElementById('inputText').value;
             const language = document.getElementById('languageSelect').value;
+            
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('result').classList.add('hidden');
             document.getElementById('generateBtn').disabled = true;
+            document.getElementById('generateBtn').classList.add('opacity-50', 'cursor-not-allowed');
+
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -568,41 +449,158 @@
                         intent: currentIntent
                     })
                 });
+                
                 const data = await response.json();
+                
                 document.getElementById('outputText').value = data.result;
                 document.getElementById('result').classList.remove('hidden');
-                document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // SAVE TO HISTORY
+                
+                // Smooth scroll to result
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
                 saveHistory(text, data.result, currentMode);
+
             } catch (error) {
-                document.getElementById('inputText').value = "Error connecting to AI. Please try again.";
+                console.error(error);
+                alert("Error connecting to server. Please try again later.");
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('generateBtn').disabled = false;
+                document.getElementById('generateBtn').classList.remove('opacity-50', 'cursor-not-allowed');
             }
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('generateBtn').disabled = false;
         }
 
         function copyText() {
             const copyText = document.getElementById("outputText");
             copyText.select();
+            copyText.setSelectionRange(0, 99999); // Mobile
             navigator.clipboard.writeText(copyText.value);
+            
             const btnText = document.getElementById("copyBtnText");
             const originalHTML = btnText.innerHTML;
-            btnText.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-green-600"></i> <span class="text-green-600 font-bold">Copied!</span>`;
-            lucide.createIcons();
+            
+            btnText.innerHTML = `<span class="text-green-600 font-bold">Copied!</span>`;
+            
             setTimeout(() => {
                 btnText.innerHTML = originalHTML;
-                lucide.createIcons();
+                lucide.createIcons(); // Re-render icon
             }, 2000);
         }
 
-        // PWA Installation
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('App Installed!', reg.scope))
-                    .catch(err => console.log('App Fail:', err));
+        // --- HISTORY MANAGEMENT ---
+
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            if(panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                loadHistory();
+            } else {
+                panel.classList.add('hidden');
+            }
+        }
+
+        function saveHistory(original, result, type) {
+            try {
+                let history = JSON.parse(localStorage.getItem('pp_history') || '[]');
+                const newItem = { 
+                    original: original.length > 60 ? original.substring(0, 60) + "..." : original, 
+                    fullOriginal: original,
+                    result: result, 
+                    type: type,
+                    date: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+                };
+                history.unshift(newItem);
+                if(history.length > 10) history.pop();
+                localStorage.setItem('pp_history', JSON.stringify(history));
+            } catch(e) {
+                console.log("History storage disabled");
+            }
+        }
+
+        function loadHistory() {
+            const list = document.getElementById('historyList');
+            list.innerHTML = "";
+            let history = [];
+            
+            try { history = JSON.parse(localStorage.getItem('pp_history') || '[]'); } 
+            catch(e) { localStorage.removeItem('pp_history'); }
+
+            if(history.length === 0) {
+                list.innerHTML = '<p class="text-sm text-slate-400 text-center py-10">No history yet.</p>';
+                return;
+            }
+
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm cursor-pointer hover:bg-brand-50 hover:border-brand-200 transition group";
+                div.onclick = () => {
+                    document.getElementById('inputText').value = item.fullOriginal;
+                    document.getElementById('outputText').value = item.result;
+                    document.getElementById('result').classList.remove('hidden');
+                    toggleHistory();
+                };
+                div.innerHTML = `
+                    <div class="flex justify-between text-xs text-slate-400 mb-2">
+                        <span class="uppercase font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full border border-brand-100">${item.type}</span>
+                        <span>${item.date}</span>
+                    </div>
+                    <div class="font-medium text-slate-700 truncate group-hover:text-brand-700">${item.original}</div>
+                `;
+                list.appendChild(div);
             });
         }
+
+        function clearHistory() {
+            localStorage.removeItem('pp_history');
+            loadHistory();
+        }
+
+        // --- SPEECH RECOGNITION ---
+        
+        let recognition;
+        let isRecording = false;
+        
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            recognition.onstart = function() {
+                isRecording = true;
+                document.getElementById('micPulse').classList.remove('hidden');
+                document.getElementById('micBtn').classList.add('text-red-500', 'bg-red-50');
+                document.getElementById('speechStatus').classList.remove('hidden');
+                document.getElementById('inputText').placeholder = "Listening...";
+            };
+            
+            recognition.onend = function() {
+                isRecording = false;
+                document.getElementById('micPulse').classList.add('hidden');
+                document.getElementById('micBtn').classList.remove('text-red-500', 'bg-red-50');
+                document.getElementById('speechStatus').classList.add('hidden');
+                document.getElementById('inputText').placeholder = "Type here... or click the mic to speak!";
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const input = document.getElementById('inputText');
+                input.value += (input.value.length > 0 ? " " : "") + transcript;
+            };
+        } else {
+            document.getElementById('micBtn').style.display = 'none';
+        }
+
+        function toggleSpeech() {
+            if (!recognition) return;
+            if (isRecording) recognition.stop();
+            else recognition.start();
+        }
+
+        // Initialize mode on load
+        setMode('rewrite');
+
     </script>
 </body>
 </html>
