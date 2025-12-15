@@ -92,7 +92,18 @@
 
         <div id="tool" class="max-w-3xl mx-auto glass rounded-3xl shadow-xl overflow-hidden relative mb-20">
             
-            <div class="flex border-b border-slate-200 overflow-x-auto">
+            <div id="historyPanel" class="hidden absolute inset-0 bg-white/95 z-20 p-6 overflow-y-auto backdrop-blur-md rounded-3xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg flex items-center gap-2"><i data-lucide="history" class="w-5 h-5"></i> Recent History</h3>
+                    <button onclick="toggleHistory()" class="p-2 hover:bg-slate-100 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div id="historyList" class="space-y-3">
+                    <p class="text-sm text-slate-400 text-center py-10">No history yet. Write something!</p>
+                </div>
+                <button onclick="clearHistory()" class="w-full mt-6 py-2 text-xs text-red-400 hover:text-red-600 border border-red-100 rounded-lg">Clear History</button>
+            </div>
+
+            <div class="flex border-b border-slate-200 overflow-x-auto relative">
                 <button onclick="setMode('rewrite')" id="tabRewrite" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition whitespace-nowrap">
                     ✍️ Rewrite
                 </button>
@@ -101,6 +112,10 @@
                 </button>
                 <button onclick="setMode('summarize')" id="tabSummarize" class="flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap">
                     📝 Summarize
+                </button>
+                
+                <button onclick="toggleHistory()" class="absolute right-0 top-0 h-full px-4 text-slate-400 hover:text-brand-600 bg-white/50 backdrop-blur-sm border-l border-slate-100">
+                    <i data-lucide="history" class="w-5 h-5"></i>
                 </button>
             </div>
 
@@ -204,37 +219,6 @@
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center mb-20">
-            <div class="space-y-6">
-                <h2 class="text-3xl font-bold text-slate-900">Why professionals rely on PolitePost</h2>
-                <p class="text-slate-500 leading-relaxed">
-                    In the modern workplace, <strong>communication is currency</strong>. A poorly worded email can be interpreted as aggression, leading to HR complaints or stalled projects. 
-                </p>
-                <div class="bg-brand-50 border border-brand-100 rounded-xl p-4">
-                    <h3 class="font-bold text-brand-900 text-sm mb-2">New Feature: Email Summarizer</h3>
-                    <p class="text-xs text-brand-700">Drowning in long email threads? Paste them into our "Summarize" tab to get a TL;DR and key action items instantly.</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="font-bold text-lg mb-4">Common Translations</h3>
-                <div class="space-y-4">
-                    <div class="p-3 bg-slate-50 rounded-lg">
-                        <div class="text-xs text-red-400 font-bold uppercase">Rude</div>
-                        <div class="text-slate-600 line-through">"I already told you this."</div>
-                        <div class="text-xs text-green-600 font-bold uppercase mt-2">Professional</div>
-                        <div class="text-slate-900">"As mentioned in my previous email..."</div>
-                    </div>
-                    <div class="p-3 bg-slate-50 rounded-lg">
-                        <div class="text-xs text-red-400 font-bold uppercase">Rude</div>
-                        <div class="text-slate-600 line-through">"That's not my problem."</div>
-                        <div class="text-xs text-green-600 font-bold uppercase mt-2">Professional</div>
-                        <div class="text-slate-900">"I believe this falls outside my scope of work."</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="max-w-6xl mx-auto mt-24">
             <div class="flex justify-between items-end mb-8 px-4">
                 <div>
@@ -250,13 +234,11 @@
                     <h3 class="font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition">How to say "I told you so" professionally</h3>
                     <p class="text-xs text-slate-500 line-clamp-2">You warned them, they didn't listen. Here is how to point that out without being rude.</p>
                 </a>
-
                 <a href="article-say-no.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
                     <span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full uppercase">Templates</span>
                     <h3 class="font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition">5 Ways to say "No" to extra work</h3>
                     <p class="text-xs text-slate-500 line-clamp-2">Don't let your boss overload you. Use these 5 scripts to decline politely.</p>
                 </a>
-
                 <a href="article-per-my-last-email.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
                     <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-1 rounded-full uppercase">Career</span>
                     <h3 class="font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition">The art of the "Per my last email"</h3>
@@ -277,7 +259,7 @@
                     <h3 class="font-bold text-slate-900 flex items-center gap-2">
                         <i data-lucide="lock" class="w-4 h-4 text-brand-600"></i> Is my data private?
                     </h3>
-                    <p class="text-slate-500 text-sm mt-2">Yes. We do not store, log, or read your emails. Your text is processed by a secure AI model and immediately discarded. No login is required.</p>
+                    <p class="text-slate-500 text-sm mt-2">Yes. We do not store, log, or read your emails. Your text is processed by a secure AI model and immediately discarded. History is stored only on your own device.</p>
                 </div>
 
                 <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
@@ -347,15 +329,74 @@
         let currentMode = "rewrite";
         let currentIntent = "Professional Reply";
 
+        // --- HISTORY LOGIC ---
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            if(panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                loadHistory();
+            } else {
+                panel.classList.add('hidden');
+            }
+        }
+
+        function saveHistory(original, result, type) {
+            let history = JSON.parse(localStorage.getItem('pp_history') || '[]');
+            const newItem = { 
+                original: original.substring(0, 50) + "...", 
+                fullOriginal: original,
+                result: result, 
+                type: type,
+                date: new Date().toLocaleTimeString() 
+            };
+            history.unshift(newItem);
+            if(history.length > 10) history.pop();
+            localStorage.setItem('pp_history', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('pp_history') || '[]');
+            const list = document.getElementById('historyList');
+            list.innerHTML = "";
+            
+            if(history.length === 0) {
+                list.innerHTML = '<p class="text-sm text-slate-400 text-center py-10">No history yet.</p>';
+                return;
+            }
+
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-slate-50 p-3 rounded-xl border border-slate-100 text-sm cursor-pointer hover:bg-brand-50 hover:border-brand-200 transition";
+                div.onclick = () => {
+                    document.getElementById('inputText').value = item.fullOriginal;
+                    document.getElementById('outputText').value = item.result;
+                    document.getElementById('result').classList.remove('hidden');
+                    toggleHistory();
+                };
+                div.innerHTML = `
+                    <div class="flex justify-between text-xs text-slate-400 mb-1">
+                        <span class="uppercase font-bold">${item.type}</span>
+                        <span>${item.date}</span>
+                    </div>
+                    <div class="font-medium text-slate-700 truncate">${item.original}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('pp_history');
+            loadHistory();
+        }
+
+        // --- TEMPLATE LOGIC ---
         function applyTemplate(type) {
             const input = document.getElementById('inputText');
             let text = "";
-            
             if(type === 'raise') text = "I want a raise. I have done good work lately and I think I deserve more money.";
             else if(type === 'resign') text = "I am quitting. My last day is in two weeks. Thanks for everything.";
             else if(type === 'late') text = "Sorry I'm late. Traffic was bad. I will be there in 20 mins.";
             else if(type === 'angry') text = "Why did you do that? You messed up the project and now I have to fix it. It's annoying.";
-            
             input.value = text;
             input.classList.add('bg-brand-50', 'ring-2', 'ring-brand-200');
             setTimeout(() => {
@@ -363,16 +404,15 @@
             }, 400);
         }
 
+        // --- VOICE LOGIC ---
         let recognition;
         let isRecording = false;
-
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
             recognition.lang = 'en-US';
-
             recognition.onstart = function() {
                 isRecording = true;
                 document.getElementById('micPulse').classList.remove('hidden');
@@ -380,7 +420,6 @@
                 document.getElementById('speechStatus').classList.remove('hidden');
                 document.getElementById('inputText').placeholder = "Listening...";
             };
-
             recognition.onend = function() {
                 isRecording = false;
                 document.getElementById('micPulse').classList.add('hidden');
@@ -388,35 +427,26 @@
                 document.getElementById('speechStatus').classList.add('hidden');
                 document.getElementById('inputText').placeholder = "Type here... or click the mic to speak!";
             };
-
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
                 const input = document.getElementById('inputText');
-                if(input.value.length > 0) {
-                    input.value += " " + transcript;
-                } else {
-                    input.value = transcript;
-                }
+                if(input.value.length > 0) input.value += " " + transcript;
+                else input.value = transcript;
             };
-            
             recognition.onerror = function(event) {
-                console.error("Speech error", event.error);
                 isRecording = false;
                 document.getElementById('micPulse').classList.add('hidden');
             };
         } else {
             document.getElementById('micBtn').style.display = 'none';
         }
-
         function toggleSpeech() {
             if (!recognition) return;
-            if (isRecording) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
+            if (isRecording) recognition.stop();
+            else recognition.start();
         }
 
+        // --- MAIN APP LOGIC ---
         function setMode(mode) {
             currentMode = mode;
             ['tabRewrite', 'tabReply', 'tabSummarize'].forEach(id => {
@@ -494,12 +524,10 @@
 
         async function analyzeTone() {
             if(!validateInput()) return;
-            
             const text = document.getElementById('inputText').value;
             document.getElementById('scorePanel').classList.remove('hidden');
             document.getElementById('scoreText').innerText = "Analyzing...";
             document.getElementById('scoreBar').style.width = "0%";
-
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -509,11 +537,9 @@
                 const data = await response.json();
                 const analysis = JSON.parse(data.result);
                 const score = analysis.score;
-                
                 document.getElementById('scoreVal').innerText = score + "%";
                 document.getElementById('scoreBar').style.width = score + "%";
                 document.getElementById('scoreText').innerText = `${analysis.tone_label}: ${analysis.critique}`;
-                
                 const bar = document.getElementById('scoreBar');
                 if(score > 80) bar.className = "bg-green-500 h-2.5 rounded-full transition-all duration-1000";
                 else if(score > 50) bar.className = "bg-yellow-500 h-2.5 rounded-full transition-all duration-1000";
@@ -525,14 +551,11 @@
 
         async function generate() {
             if(!validateInput()) return;
-
             const text = document.getElementById('inputText').value;
             const language = document.getElementById('languageSelect').value;
-
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('result').classList.add('hidden');
             document.getElementById('generateBtn').disabled = true;
-
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -549,6 +572,8 @@
                 document.getElementById('outputText').value = data.result;
                 document.getElementById('result').classList.remove('hidden');
                 document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // SAVE TO HISTORY
+                saveHistory(text, data.result, currentMode);
             } catch (error) {
                 document.getElementById('inputText').value = "Error connecting to AI. Please try again.";
             }
@@ -560,20 +585,17 @@
             const copyText = document.getElementById("outputText");
             copyText.select();
             navigator.clipboard.writeText(copyText.value);
-            
             const btnText = document.getElementById("copyBtnText");
             const originalHTML = btnText.innerHTML;
-            
             btnText.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-green-600"></i> <span class="text-green-600 font-bold">Copied!</span>`;
             lucide.createIcons();
-            
             setTimeout(() => {
                 btnText.innerHTML = originalHTML;
                 lucide.createIcons();
             }, 2000);
         }
 
-        // PWA Installation Logic
+        // PWA Installation
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
