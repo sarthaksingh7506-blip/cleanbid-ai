@@ -26,6 +26,10 @@
         .menu-closed { transform: translateX(-100%); }
         .fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .scrollbar-hide { -ms-overflow-style: none;  scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
@@ -98,6 +102,25 @@
             </div>
 
             <div class="p-6 md:p-8">
+                
+                <div id="templateArea" class="mb-6 animate-fade-up">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Or try a quick template:</p>
+                    <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                        <button onclick="applyTemplate('raise')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-brand-500 hover:text-brand-600 hover:bg-white hover:shadow-md transition">
+                            💰 Ask for Raise
+                        </button>
+                        <button onclick="applyTemplate('resign')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-red-400 hover:text-red-500 hover:bg-white hover:shadow-md transition">
+                            🚪 Quit Job
+                        </button>
+                        <button onclick="applyTemplate('late')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-yellow-400 hover:text-yellow-600 hover:bg-white hover:shadow-md transition">
+                            🐢 Running Late
+                        </button>
+                        <button onclick="applyTemplate('angry')" class="whitespace-nowrap px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 hover:border-orange-400 hover:text-orange-600 hover:bg-white hover:shadow-md transition">
+                            😡 Angry at Coworker
+                        </button>
+                    </div>
+                </div>
+
                 <div class="flex justify-between items-center mb-2">
                     <label id="inputLabel" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Paste your draft</label>
                     <button onclick="analyzeTone()" id="analyzeBtn" class="text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1 rounded-full transition flex items-center gap-1 border border-brand-100">
@@ -129,6 +152,7 @@
                     <div class="w-full md:w-auto">
                         <select id="languageSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 outline-none font-medium">
                             <option value="English">🇺🇸 English</option>
+                            <option value="British English">🇬🇧 English (UK)</option>
                             <option value="Spanish">🇪🇸 Spanish</option>
                             <option value="French">🇫🇷 French</option>
                             <option value="German">🇩🇪 German</option>
@@ -250,6 +274,25 @@
         let currentMode = "rewrite";
         let currentIntent = "Professional Reply";
 
+        // --- NEW TEMPLATE LOGIC ---
+        function applyTemplate(type) {
+            const input = document.getElementById('inputText');
+            let text = "";
+            
+            if(type === 'raise') text = "I want a raise. I have done good work lately and I think I deserve more money.";
+            else if(type === 'resign') text = "I am quitting. My last day is in two weeks. Thanks for everything.";
+            else if(type === 'late') text = "Sorry I'm late. Traffic was bad. I will be there in 20 mins.";
+            else if(type === 'angry') text = "Why did you do that? You messed up the project and now I have to fix it. It's annoying.";
+            
+            input.value = text;
+            
+            // Visual feedback (Flash)
+            input.classList.add('bg-brand-50', 'ring-2', 'ring-brand-200');
+            setTimeout(() => {
+                input.classList.remove('bg-brand-50', 'ring-2', 'ring-brand-200');
+            }, 400);
+        }
+
         function setMode(mode) {
             currentMode = mode;
             
@@ -271,10 +314,12 @@
             const btnText = document.getElementById('btnText');
             const toneButtons = document.getElementById('toneButtons');
             const analyzeBtn = document.getElementById('analyzeBtn');
+            const templateArea = document.getElementById('templateArea'); // NEW
 
             if(mode === 'rewrite') {
                 inputLabel.innerText = "Paste your rough draft";
                 inputText.placeholder = "e.g. Stop wasting my time!";
+                templateArea.classList.remove('hidden'); // Show Templates
                 replyIntents.classList.add('hidden');
                 toneButtons.classList.remove('hidden');
                 analyzeBtn.classList.remove('hidden');
@@ -282,16 +327,18 @@
             } else if (mode === 'reply') {
                 inputLabel.innerText = "Paste the email you received";
                 inputText.placeholder = "Paste the email from your boss/client here...";
+                templateArea.classList.add('hidden'); // Hide Templates
                 replyIntents.classList.remove('hidden');
                 toneButtons.classList.remove('hidden');
                 analyzeBtn.classList.add('hidden');
                 btnText.innerText = "Generate Reply";
             } else {
-                // SUMMARIZE MODE
+                // Summarize
                 inputLabel.innerText = "Paste the long email thread";
                 inputText.placeholder = "Paste the messy long email here...";
+                templateArea.classList.add('hidden'); // Hide Templates
                 replyIntents.classList.add('hidden');
-                toneButtons.classList.add('hidden'); // Hide tones for summary
+                toneButtons.classList.add('hidden');
                 analyzeBtn.classList.add('hidden');
                 btnText.innerText = "Summarize";
             }
@@ -383,7 +430,6 @@
                 const data = await response.json();
                 document.getElementById('outputText').value = data.result;
                 document.getElementById('result').classList.remove('hidden');
-                // Auto scroll to result
                 document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
             } catch (error) {
                 document.getElementById('inputText').value = "Error connecting to AI. Please try again.";
