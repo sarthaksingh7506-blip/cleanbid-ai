@@ -26,9 +26,8 @@
         .menu-closed { transform: translateX(-100%); }
         .fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Hide scrollbar for Chrome, Safari and Opera */
+        /* Hide scrollbar */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
-        /* Hide scrollbar for IE, Edge and Firefox */
         .scrollbar-hide { -ms-overflow-style: none;  scrollbar-width: none; }
     </style>
 </head>
@@ -152,7 +151,6 @@
                     <div class="w-full md:w-auto">
                         <select id="languageSelect" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 outline-none font-medium">
                             <option value="English">🇺🇸 English</option>
-                            <option value="British English">🇬🇧 English (UK)</option>
                             <option value="Spanish">🇪🇸 Spanish</option>
                             <option value="French">🇫🇷 French</option>
                             <option value="German">🇩🇪 German</option>
@@ -274,7 +272,6 @@
         let currentMode = "rewrite";
         let currentIntent = "Professional Reply";
 
-        // --- NEW TEMPLATE LOGIC ---
         function applyTemplate(type) {
             const input = document.getElementById('inputText');
             let text = "";
@@ -285,8 +282,6 @@
             else if(type === 'angry') text = "Why did you do that? You messed up the project and now I have to fix it. It's annoying.";
             
             input.value = text;
-            
-            // Visual feedback (Flash)
             input.classList.add('bg-brand-50', 'ring-2', 'ring-brand-200');
             setTimeout(() => {
                 input.classList.remove('bg-brand-50', 'ring-2', 'ring-brand-200');
@@ -295,31 +290,26 @@
 
         function setMode(mode) {
             currentMode = mode;
-            
-            // Reset Tabs
             ['tabRewrite', 'tabReply', 'tabSummarize'].forEach(id => {
                 const el = document.getElementById(id);
                 el.className = "flex-1 min-w-[100px] py-4 text-sm font-bold text-slate-500 hover:text-brand-600 bg-slate-50 hover:bg-slate-100 transition whitespace-nowrap";
             });
-
-            // Activate Selected Tab
             const activeId = mode === 'rewrite' ? 'tabRewrite' : mode === 'reply' ? 'tabReply' : 'tabSummarize';
             const activeEl = document.getElementById(activeId);
             activeEl.className = "flex-1 min-w-[100px] py-4 text-sm font-bold text-brand-600 border-b-2 border-brand-600 bg-white hover:bg-slate-50 transition whitespace-nowrap";
 
-            // UI Logic
             const inputLabel = document.getElementById('inputLabel');
             const inputText = document.getElementById('inputText');
             const replyIntents = document.getElementById('replyIntents');
             const btnText = document.getElementById('btnText');
             const toneButtons = document.getElementById('toneButtons');
             const analyzeBtn = document.getElementById('analyzeBtn');
-            const templateArea = document.getElementById('templateArea'); // NEW
+            const templateArea = document.getElementById('templateArea');
 
             if(mode === 'rewrite') {
                 inputLabel.innerText = "Paste your rough draft";
                 inputText.placeholder = "e.g. Stop wasting my time!";
-                templateArea.classList.remove('hidden'); // Show Templates
+                templateArea.classList.remove('hidden');
                 replyIntents.classList.add('hidden');
                 toneButtons.classList.remove('hidden');
                 analyzeBtn.classList.remove('hidden');
@@ -327,16 +317,15 @@
             } else if (mode === 'reply') {
                 inputLabel.innerText = "Paste the email you received";
                 inputText.placeholder = "Paste the email from your boss/client here...";
-                templateArea.classList.add('hidden'); // Hide Templates
+                templateArea.classList.add('hidden');
                 replyIntents.classList.remove('hidden');
                 toneButtons.classList.remove('hidden');
                 analyzeBtn.classList.add('hidden');
                 btnText.innerText = "Generate Reply";
             } else {
-                // Summarize
                 inputLabel.innerText = "Paste the long email thread";
                 inputText.placeholder = "Paste the messy long email here...";
-                templateArea.classList.add('hidden'); // Hide Templates
+                templateArea.classList.add('hidden');
                 replyIntents.classList.add('hidden');
                 toneButtons.classList.add('hidden');
                 analyzeBtn.classList.add('hidden');
@@ -360,6 +349,7 @@
             event.target.classList.add('ring-2', 'ring-brand-500');
         }
 
+        // --- NEW: VISUAL VALIDATION (No Alerts) ---
         function validateInput() {
             const text = document.getElementById('inputText').value;
             if(!text.trim()) {
@@ -432,12 +422,14 @@
                 document.getElementById('result').classList.remove('hidden');
                 document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
             } catch (error) {
+                // UI Error Message (No Alert)
                 document.getElementById('inputText').value = "Error connecting to AI. Please try again.";
             }
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('generateBtn').disabled = false;
         }
 
+        // --- NEW: COPY BUTTON (No Alert) ---
         function copyText() {
             const copyText = document.getElementById("outputText");
             copyText.select();
@@ -446,6 +438,7 @@
             const btnText = document.getElementById("copyBtnText");
             const originalHTML = btnText.innerHTML;
             
+            // Change button text temporarily
             btnText.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-green-600"></i> <span class="text-green-600 font-bold">Copied!</span>`;
             lucide.createIcons();
             
